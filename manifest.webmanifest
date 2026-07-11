@@ -1,0 +1,16 @@
+{
+  "name": "Мой дневник здоровья",
+  "short_name": "Здоровье",
+  "description": "Личный дневник самочувствия и медицинской истории",
+  "lang": "ru",
+  "start_url": "./#today",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f5f1e8",
+  "theme_color": "#123b3a",
+  "icons": [
+    {"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}
+  ]
+}
+
+

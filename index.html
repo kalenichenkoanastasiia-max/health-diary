@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#123b3a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Дневник здоровья">
+  <title>Мой дневник здоровья</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icon.svg">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#today"><span class="brand-mark">A</span><span>Мой дневник<br><small>здоровья</small></span></a>
+    <nav aria-label="Основная навигация">
+      <button class="nav active" data-view="today">Сегодня</button>
+      <button class="nav" data-view="diary">Дневник</button>
+      <button class="nav" data-view="history">История болезни</button>
+      <button class="nav" data-view="profile">Медкарта</button>
+    </nav>
+    <button class="account-button" id="accountButton">Войти</button>
+    <button class="install-button" id="installButton" hidden>Установить</button>
+    <button class="icon-button" id="dataButton" title="Резервная копия">↗</button>
+  </header>
+
+  <main>
+    <section class="view active" id="today">
+      <div class="hero">
+        <div><p class="eyebrow" id="todayDate"></p><h1>Как ты себя чувствуешь?</h1><p>Пара минут сегодня помогут увидеть закономерности завтра.</p></div>
+        <button class="primary" data-new-entry>＋ Новая запись</button>
+      </div>
+      <div class="stats">
+        <article><span class="stat-icon coral">♥</span><div><small>Последняя боль</small><strong id="lastPain">Нет записей</strong><em id="lastPainDate">—</em></div></article>
+        <article><span class="stat-icon blue">⌁</span><div><small>Давление</small><strong id="lastBp">—</strong><em>последнее измерение</em></div></article>
+        <article><span class="stat-icon gold">☼</span><div><small>Самочувствие</small><strong id="lastMood">—</strong><em>последняя запись</em></div></article>
+      </div>
+      <div class="grid-main">
+        <article class="card">
+          <div class="card-head"><div><p class="eyebrow">Последние 14 дней</p><h2>Интенсивность боли</h2></div><span class="legend">● боль, 0–10</span></div>
+          <div id="painChart" class="chart empty-chart">Пока нет данных. Добавь первую запись.</div>
+        </article>
+        <article class="card upcoming"><div class="card-head"><div><p class="eyebrow">Контроль</p><h2>Следующее обследование</h2></div></div><div class="date-tile"><strong>—</strong><span>Данные появятся<br>после входа</span></div><p>Войдите, чтобы загрузить личную медицинскую историю.</p></article>
+      </div>
+      <article class="card recent"><div class="card-head"><div><p class="eyebrow">Дневник</p><h2>Последние записи</h2></div><button class="text-button" data-view-link="diary">Все записи →</button></div><div id="recentEntries" class="empty">Записей пока нет</div></article>
+    </section>
+
+    <section class="view" id="diary">
+      <div class="page-head"><div><p class="eyebrow">Наблюдения</p><h1>Дневник самочувствия</h1><p>Все факторы рядом — проще заметить, что связано с головной болью.</p></div><button class="primary" data-new-entry>＋ Добавить запись</button></div>
+      <div class="filter-row"><input id="diarySearch" type="search" placeholder="Поиск по заметкам…"><select id="painFilter"><option value="all">Любая боль</option><option value="0">Без боли</option><option value="1">С болью</option><option value="7">Сильная (7+)</option></select></div>
+      <div id="entriesList" class="entry-list"></div>
+    </section>
+
+    <section class="view" id="history">
+      <div class="page-head"><div><p class="eyebrow">2021–2027</p><h1>История болезни</h1><p>Хронология перенесена из PDF. Исходный документ не изменён.</p></div><button class="primary" id="newHistoryEvent">＋ Добавить событие</button></div>
+      <div class="history-toolbar"><input id="historySearch" type="search" placeholder="Найти событие, врача или обследование…"><div class="chips"><button class="chip active" data-type="all">Все</button><button class="chip" data-type="operation">Операции</button><button class="chip" data-type="mri">МРТ</button><button class="chip" data-type="exam">Обследования</button><button class="chip" data-type="treatment">Назначения</button></div></div>
+      <div id="timeline" class="timeline"></div>
+    </section>
+
+    <section class="view" id="profile"><div class="page-head"><div><p class="eyebrow">Кратко для врача</p><h1>Медицинская карта</h1><p>Личные сведения загружаются только после входа.</p></div><button class="secondary" onclick="window.print()">Печать</button></div><article class="card"><p class="eyebrow">Приватные данные</p><h2>Войдите в аккаунт</h2><p>После синхронизации здесь будет доступна ваша медицинская история. Публичная версия сайта не содержит диагнозов или персональных данных.</p></article></section>
+  </main>
+
+  <dialog id="entryDialog">
+    <form id="entryForm" method="dialog" novalidate>
+      <div class="dialog-head"><div><p class="eyebrow">Ежедневная запись</p><h2>Как прошёл день?</h2></div><button type="button" class="close" data-close>×</button></div>
+      <input type="hidden" name="id">
+      <div class="form-grid">
+        <label>Дата и время<input name="date" type="datetime-local"></label>
+        <label>Общее самочувствие<select name="wellbeing"><option>Отличное</option><option selected>Нормальное</option><option>Так себе</option><option>Плохое</option></select></label>
+        <label class="span-2 range-label">Головная боль <output id="painOut">0 — нет боли</output><input name="pain" type="range" min="0" max="10" value="0"></label>
+        <label>Где болит?<select name="location"><option>Не болит</option><option>Лоб</option><option>Виски</option><option>Затылок</option><option>Одна сторона</option><option>Вся голова</option><option>За глазами</option><option>Другое</option></select></label>
+        <label>Характер боли<select name="painType"><option>Нет</option><option>Давящая</option><option>Пульсирующая</option><option>Острая</option><option>Тупая</option><option>Распирающая</option></select></label>
+        <label>Давление, левая рука<input name="bpLeft" class="bp-input" inputmode="numeric" maxlength="7" placeholder="120/80"></label>
+        <label>Давление, правая рука<input name="bpRight" class="bp-input" inputmode="numeric" maxlength="7" placeholder="120/80"></label>
+        <label>Пульс<input name="pulse" type="number" min="30" max="220" placeholder="уд/мин"></label>
+        <label>Настроение<select name="mood"><option>😊 Хорошее</option><option selected>😐 Спокойное</option><option>😟 Тревожное</option><option>😢 Грустное</option><option>😠 Раздражённое</option></select></label>
+        <label>Сон, часов<input name="sleep" type="number" min="0" max="24" step="0.5" placeholder="8"></label>
+        <label>Качество сна<select name="sleepQuality"><option>Хорошее</option><option selected>Среднее</option><option>Плохое</option></select></label>
+        <label>Погода<select name="weather"><option>☀️ Ясно</option><option>⛅ Облачно</option><option>🌧 Дождь</option><option>❄️ Снег</option><option>🌬 Ветрено</option><option>⛈ Гроза</option></select></label>
+        <label>Стресс (0–10)<input name="stress" type="number" min="0" max="10" value="0"></label>
+        <label>Менструальный цикл<select name="cycle"><option>Не отмечать</option><option>Месячные</option><option>За 1–3 дня до</option><option>Овуляция</option><option>Другая фаза</option></select></label>
+        <label>День цикла<input name="cycleDay" type="number" min="1" max="60" placeholder="например, 3"></label>
+        <label>Вода, стаканов<input name="water" type="number" min="0" max="30" placeholder="8"></label>
+        <label>Физическая активность<input name="activity" placeholder="ходьба, спорт…"></label>
+        <label class="span-2">Лекарства / что помогло<input name="meds" placeholder="название, доза и эффект"></label>
+        <label class="span-2">Другие симптомы<textarea name="symptoms" placeholder="тошнота, светобоязнь, шум, нарушение зрения…"></textarea></label>
+        <label class="span-2">Заметка<textarea name="notes" placeholder="Питание, кофе, экранное время, события дня — всё, что могло повлиять"></textarea></label>
+      </div>
+      <div class="dialog-actions"><button type="button" class="secondary" data-close>Отмена</button><button type="button" id="saveEntryButton" class="primary">Сохранить запись</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="dataDialog" class="small-dialog"><div class="dialog-head"><div><p class="eyebrow">Ваши данные</p><h2>Резервная копия</h2></div><button class="close" data-data-close>×</button></div><p>Записи хранятся только в этом браузере. Регулярно сохраняйте копию.</p><div class="stack"><button class="primary" id="exportData">Экспортировать JSON</button><label class="secondary file-label">Импортировать JSON<input id="importData" type="file" accept="application/json"></label></div></dialog>
+  <dialog id="historyDialog" class="history-dialog"><form id="historyForm" method="dialog"><div class="dialog-head"><div><p class="eyebrow">Медицинская история</p><h2 id="historyDialogTitle">Новое событие</h2></div><button type="button" class="close" data-history-close>×</button></div><input type="hidden" name="id"><div class="form-grid"><label>Дата<input required name="date" type="date"></label><label>Тип события<select required name="type"><option value="exam">Приём врача / обследование</option><option value="mri">МРТ</option><option value="operation">Операция</option><option value="treatment">Назначение / лечение</option></select></label><label class="span-2">Название<input required name="title" placeholder="Например: консультация невролога"></label><label>Врач<input name="doctor" placeholder="Имя врача"></label><label>Клиника / город<input name="clinic" placeholder="Название клиники, город"></label><label class="span-2">Результат и рекомендации<textarea name="description" placeholder="Что сказал врач, результаты, следующий контроль…"></textarea></label><label class="span-2">Назначенные лекарства<textarea name="medications" placeholder="Название, дозировка, длительность курса"></textarea></label><label class="span-2">Дополнительные заметки<textarea name="notes" placeholder="Вопросы врачу, документы, диск МРТ и другие детали"></textarea></label></div><div class="dialog-actions"><button type="button" class="secondary" data-history-close>Отмена</button><button class="primary">Сохранить событие</button></div></form></dialog>
+  <dialog id="authDialog" class="small-dialog"><form id="authForm"><div class="dialog-head"><div><p class="eyebrow">Приватная синхронизация</p><h2>Вход в дневник</h2></div><button type="button" class="close" data-auth-close>×</button></div><p>Войдите с одинаковым email на телефоне и компьютере.</p><label class="auth-label">Email<input required name="email" type="email" autocomplete="email" placeholder="name@example.com"></label><label class="auth-label">Пароль<input required name="password" type="password" minlength="8" autocomplete="current-password" placeholder="Не менее 8 символов"></label><p id="authMessage" class="auth-message"></p><div class="stack"><button class="primary" name="action" value="signin">Войти</button><button class="secondary" name="action" value="signup">Создать аккаунт</button><button type="button" class="text-button forgot-button" id="forgotPassword">Забыли пароль?</button></div></form></dialog>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="app.js"></script>
+  <script src="cloud.js"></script>
+</body>
+</html>
+
+
