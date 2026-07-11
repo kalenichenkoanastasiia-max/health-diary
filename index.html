@@ -19,6 +19,7 @@
     <nav aria-label="Основная навигация">
       <button class="nav active" data-view="today">Сегодня</button>
       <button class="nav" data-view="diary">Дневник</button>
+      <button class="nav" data-view="statistics">Статистика</button>
       <button class="nav" data-view="history">История болезни</button>
       <button class="nav" data-view="profile">Медкарта</button>
     </nav>
@@ -54,13 +55,18 @@
       <div id="entriesList" class="entry-list"></div>
     </section>
 
+    <section class="view" id="statistics">
+      <div class="page-head"><div><p class="eyebrow">Анализ наблюдений</p><h1>Статистика боли</h1><p>Закономерности рассчитываются по записям дневника.</p></div><select id="statsPeriod" class="period-select"><option value="30">30 дней</option><option value="90">90 дней</option><option value="365">Год</option><option value="all">Всё время</option></select></div>
+      <div id="statsContent"></div>
+    </section>
+
     <section class="view" id="history">
       <div class="page-head"><div><p class="eyebrow">2021–2027</p><h1>История болезни</h1><p>Хронология перенесена из PDF. Исходный документ не изменён.</p></div><button class="primary" id="newHistoryEvent">＋ Добавить событие</button></div>
       <div class="history-toolbar"><input id="historySearch" type="search" placeholder="Найти событие, врача или обследование…"><div class="chips"><button class="chip active" data-type="all">Все</button><button class="chip" data-type="operation">Операции</button><button class="chip" data-type="mri">МРТ</button><button class="chip" data-type="exam">Обследования</button><button class="chip" data-type="treatment">Назначения</button></div></div>
       <div id="timeline" class="timeline"></div>
     </section>
 
-    <section class="view" id="profile"><div class="page-head"><div><p class="eyebrow">Кратко для врача</p><h1>Медицинская карта</h1><p>Личные сведения загружаются только после входа.</p></div><button class="secondary" onclick="window.print()">Печать</button></div><article class="card"><p class="eyebrow">Приватные данные</p><h2>Войдите в аккаунт</h2><p>После синхронизации здесь будет доступна ваша медицинская история. Публичная версия сайта не содержит диагнозов или персональных данных.</p></article></section>
+<section class="view" id="profile"><div class="page-head"><div><p class="eyebrow">Кратко для врача</p><h1>Медицинская карта</h1><p>Автоматическая сводка приватной медицинской истории.</p></div><button class="secondary" onclick="window.print()">Печать</button></div><div id="medicalCardContent"><article class="card"><p class="eyebrow">Приватные данные</p><h2>Войдите в аккаунт</h2><p>После синхронизации здесь появится медицинская сводка.</p></article></div></section>
   </main>
 
   <dialog id="entryDialog">
@@ -102,5 +108,3 @@
   <script src="cloud.js"></script>
 </body>
 </html>
-
-
