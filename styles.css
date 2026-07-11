@@ -61,3 +61,29 @@ dialog{border-radius:12px;max-width:calc(100vw - 24px)}dialog::backdrop{backgrou
   .nav{font-size:12px;padding-inline:8px}
   main{padding-inline:10px}.hero{padding-inline:17px}
 }
+
+/* All primary sections stay visible as a compact mobile tab bar */
+@media(max-width:760px){
+  .topbar nav{
+    display:grid;
+    grid-template-columns:repeat(5,minmax(0,1fr));
+    gap:0;
+    height:52px;
+    overflow:visible;
+    padding:0;
+  }
+  .topbar .nav{
+    min-width:0;
+    padding:5px 3px 4px;
+    font-size:11px;
+    line-height:1.15;
+    white-space:normal;
+    overflow-wrap:normal;
+    text-align:center;
+    border-bottom-width:3px;
+  }
+}
+
+@media(max-width:370px){
+  .topbar .nav{font-size:10px;padding-inline:2px}
+}
