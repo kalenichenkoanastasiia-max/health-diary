@@ -24,3 +24,40 @@ dialog{border-radius:12px;max-width:calc(100vw - 24px)}dialog::backdrop{backgrou
 /* Hard overflow guards for mobile form controls */
 .form-grid,.form-grid>label,.auth-label,.filter-row,.history-toolbar,.dialog-head,.dialog-actions{min-width:0;max-width:100%}.form-grid input,.form-grid select,.form-grid textarea,.auth-label input,.filter-row input,.filter-row select,.history-toolbar input,.period-select{box-sizing:border-box;min-width:0!important;max-width:100%!important;width:100%;-webkit-appearance:none;appearance:none}.form-grid input[type="range"]{-webkit-appearance:auto;appearance:auto}.form-grid select{padding-right:32px;background-image:linear-gradient(45deg,transparent 50%,#547083 50%),linear-gradient(135deg,#547083 50%,transparent 50%);background-position:calc(100% - 15px) 50%,calc(100% - 10px) 50%;background-size:5px 5px;background-repeat:no-repeat}.form-grid textarea{overflow-wrap:anywhere}.dialog-actions button{min-width:0;white-space:normal}.entry-meta,.timeline-extra{min-width:0}.badge{max-width:100%;overflow-wrap:anywhere;white-space:normal}
 @media(max-width:760px){dialog form,dialog.small-dialog,.history-dialog form{padding:18px}.form-grid{width:100%;overflow-x:hidden}.form-grid input,.form-grid select,.form-grid textarea,.auth-label input{font-size:16px}.dialog-actions{margin-left:0;margin-right:0}.dialog-actions .primary,.dialog-actions .secondary{flex:1;padding-left:10px;padding-right:10px}}
+
+/* Mobile polish: predictable widths, compact labels and stable header */
+.filter-row>*{flex:1 1 0;min-width:0}.history-toolbar>*{min-width:0}
+.mini-entry{min-width:0;grid-template-columns:minmax(105px,130px) minmax(0,1fr) auto}
+.mini-entry>*,.entry-card>*,.timeline-item>*{min-width:0}
+.mini-entry>.badge{align-self:start;justify-self:end;border-radius:6px;line-height:1.35;text-align:center}
+.empty{max-width:100%;overflow-wrap:anywhere;word-break:normal}
+
+@media(max-width:760px){
+  body{overflow-x:hidden}
+  .topbar{align-items:center}
+  .brand{flex:1 1 auto;max-width:calc(100% - 150px)}
+  .brand>span:last-child{min-width:0;overflow:hidden}
+  .brand>span:last-child>span,.brand small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .account-button{flex:0 1 auto}.icon-button{flex:0 0 34px;margin-left:0}
+  nav{overscroll-behavior-inline:contain;-webkit-overflow-scrolling:touch}
+  .nav{font-size:13px;padding-inline:9px}
+  .filter-row,.history-toolbar{width:100%;align-items:stretch}
+  .filter-row>*{flex:0 0 auto;width:100%;min-height:46px}
+  .history-toolbar>input{flex:0 0 auto;min-height:46px}
+  .chips{width:100%}
+  .mini-entry{grid-template-columns:minmax(0,1fr);gap:8px;padding:12px 0}
+  .mini-entry>span:first-child{grid-column:auto}
+  .mini-entry>.badge{justify-self:start;max-width:100%;padding:5px 9px}
+  .card.empty,.empty-chart{padding:18px;line-height:1.45}
+  .stats-note,.empty{font-size:14px}
+}
+
+@media(max-width:410px){
+  .topbar{padding-inline:10px}.brand{max-width:calc(100% - 126px)}
+  .brand-mark{flex:0 0 32px;width:32px;height:32px}
+  .brand>span:last-child{font-size:12px}.brand small{font-size:7px}
+  .account-button{max-width:76px;padding:6px 8px;font-size:11px}
+  nav{margin-inline:-10px;width:calc(100% + 20px);padding-inline:6px}
+  .nav{font-size:12px;padding-inline:8px}
+  main{padding-inline:10px}.hero{padding-inline:17px}
+}
