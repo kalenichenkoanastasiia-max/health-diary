@@ -11,7 +11,7 @@
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="icon.svg">
-  <link rel="stylesheet" href="styles.css?v=23">
+  <link rel="stylesheet" href="styles.css?v=24">
 </head>
 <body>
   <header class="topbar">
@@ -57,7 +57,7 @@
     </section>
 
     <section class="view" id="statistics">
-      <div class="page-head"><div><p class="eyebrow">Анализ наблюдений</p><h1>Статистика боли</h1><p>Закономерности рассчитываются по записям дневника.</p></div><select id="statsPeriod" class="period-select"><option value="30">30 дней</option><option value="90">90 дней</option><option value="365">Год</option><option value="all">Всё время</option></select></div>
+      <div class="page-head"><div><p class="eyebrow">Анализ наблюдений</p><h1>Статистика боли</h1><p>Закономерности рассчитываются по записям дневника.</p></div><select id="statsPeriod" class="period-select"><option value="all" selected>Всё время</option><option value="30">30 дней</option><option value="90">90 дней</option><option value="365">Год</option></select></div>
       <div id="statsContent"></div>
     </section>
 
@@ -110,7 +110,7 @@
   <section id="doctorReportPrint" class="doctor-report-print"></section>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="app.js?v=23"></script>
-  <script src="cloud.js?v=23"></script>
+  <script src="app.js?v=24"></script>
+  <script src="cloud.js?v=24"></script>
 </body>
 </html>
