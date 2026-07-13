@@ -19,5 +19,3 @@
   client.auth.getSession().then(({data})=>applySession(data.session));
   window.healthCloud={scheduleSync,push};
 })();
-
-

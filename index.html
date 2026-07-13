@@ -19,7 +19,6 @@
     <nav aria-label="Основная навигация">
       <button class="nav active" data-view="today">Сегодня</button>
       <button class="nav" data-view="diary">Дневник</button>
-      <button class="nav" data-view="statistics">Статистика</button>
       <button class="nav" data-view="history">История болезни</button>
       <button class="nav" data-view="profile">Медкарта</button>
     </nav>
@@ -44,7 +43,11 @@
           <div class="card-head"><div><p class="eyebrow">Последние 14 дней</p><h2>Интенсивность боли</h2></div><span class="legend">● боль, 0–10</span></div>
           <div id="painChart" class="chart empty-chart">Пока нет данных. Добавь первую запись.</div>
         </article>
-        <article class="card upcoming"><div class="card-head"><div><p class="eyebrow">Контроль</p><h2>Следующее обследование</h2></div></div><div class="date-tile"><strong>—</strong><span>Данные появятся<br>после входа</span></div><p>Войдите, чтобы загрузить личную медицинскую историю.</p></article>
+        <article class="card upcoming">
+          <div class="card-head"><div><p class="eyebrow">Контроль</p><h2>Следующее обследование</h2></div></div>
+          <div class="date-tile"><strong>2027</strong><span>МРТ<br>по рекомендации хирурга</span></div>
+          <p>После МРТ от 29.09.2025 врач рекомендовал следующий контроль через 2 года.</p>
+        </article>
       </div>
       <article class="card recent"><div class="card-head"><div><p class="eyebrow">Дневник</p><h2>Последние записи</h2></div><button class="text-button" data-view-link="diary">Все записи →</button></div><div id="recentEntries" class="empty">Записей пока нет</div></article>
     </section>
@@ -55,18 +58,22 @@
       <div id="entriesList" class="entry-list"></div>
     </section>
 
-    <section class="view" id="statistics">
-      <div class="page-head"><div><p class="eyebrow">Анализ наблюдений</p><h1>Статистика боли</h1><p>Закономерности рассчитываются по записям дневника.</p></div><select id="statsPeriod" class="period-select"><option value="30">30 дней</option><option value="90">90 дней</option><option value="365">Год</option><option value="all">Всё время</option></select></div>
-      <div id="statsContent"></div>
-    </section>
-
     <section class="view" id="history">
       <div class="page-head"><div><p class="eyebrow">2021–2027</p><h1>История болезни</h1><p>Хронология перенесена из PDF. Исходный документ не изменён.</p></div><button class="primary" id="newHistoryEvent">＋ Добавить событие</button></div>
       <div class="history-toolbar"><input id="historySearch" type="search" placeholder="Найти событие, врача или обследование…"><div class="chips"><button class="chip active" data-type="all">Все</button><button class="chip" data-type="operation">Операции</button><button class="chip" data-type="mri">МРТ</button><button class="chip" data-type="exam">Обследования</button><button class="chip" data-type="treatment">Назначения</button></div></div>
       <div id="timeline" class="timeline"></div>
     </section>
 
-<section class="view" id="profile"><div class="page-head"><div><p class="eyebrow">Кратко для врача</p><h1>Медицинская карта</h1><p>Автоматическая сводка приватной медицинской истории.</p></div><button class="secondary" onclick="window.print()">Печать</button></div><div id="medicalCardContent"><article class="card"><p class="eyebrow">Приватные данные</p><h2>Войдите в аккаунт</h2><p>После синхронизации здесь появится медицинская сводка.</p></article></div></section>
+    <section class="view" id="profile">
+      <div class="page-head"><div><p class="eyebrow">Кратко для врача</p><h1>Медицинская карта</h1><p>Сводка основных сведений из истории болезни.</p></div><button class="secondary" onclick="window.print()">Печать</button></div>
+      <div class="profile-grid">
+        <article class="card accent-card"><p class="eyebrow">Диагноз</p><h2>Гидроцефалия, ликворная киста</h2><p>Воспаление зрительного нерва обоих глаз, правый больше.</p></article>
+        <article class="card"><p class="eyebrow">Операции</p><h2>3 нейрохирургических вмешательства</h2><ul><li>07.06.2021 — эндоскопическая операция</li><li>04.05.2022 — фенестрация кисты в 3 местах</li><li>29.06.2023 — повторная фенестрация и установка катетера</li></ul></article>
+        <article class="card"><p class="eyebrow">Текущий контроль</p><h2>Положительная динамика</h2><p>21.10.2025 Dr. Lutz Schreiber: передняя часть кисты уменьшилась ещё на 3 мм. Следующее МРТ — через 2 года.</p></article>
+        <article class="card"><p class="eyebrow">Врачи и клиники</p><h2>Нейрохирургия</h2><p>Dr. med. Lutz Schreiber<br>Kinder- und Jugendklinik Gelsenkirchen</p><p class="muted">Операции также проводились в Klinikum Vest, Recklinghausen.</p></article>
+      </div>
+      <article class="notice"><strong>Важно</strong><p>Эта карта и дневник помогают хранить наблюдения, но не заменяют врача. При внезапной очень сильной головной боли, нарушении речи/зрения, слабости, судорогах или потере сознания нужна срочная медицинская помощь.</p></article>
+    </section>
   </main>
 
   <dialog id="entryDialog">
