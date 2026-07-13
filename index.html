@@ -11,7 +11,7 @@
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="icon.svg">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=21">
 </head>
 <body>
   <header class="topbar">
@@ -19,7 +19,9 @@
     <nav aria-label="Основная навигация">
       <button class="nav active" data-view="today">Сегодня</button>
       <button class="nav" data-view="diary">Дневник</button>
+      <button class="nav" data-view="statistics">Статистика</button>
       <button class="nav" data-view="history">История болезни</button>
+      <button class="nav" data-view="doctors">Мои врачи</button>
       <button class="nav" data-view="profile">Медкарта</button>
     </nav>
     <button class="account-button" id="accountButton">Войти</button>
@@ -43,11 +45,7 @@
           <div class="card-head"><div><p class="eyebrow">Последние 14 дней</p><h2>Интенсивность боли</h2></div><span class="legend">● боль, 0–10</span></div>
           <div id="painChart" class="chart empty-chart">Пока нет данных. Добавь первую запись.</div>
         </article>
-        <article class="card upcoming">
-          <div class="card-head"><div><p class="eyebrow">Контроль</p><h2>Следующее обследование</h2></div></div>
-          <div class="date-tile"><strong>2027</strong><span>МРТ<br>по рекомендации хирурга</span></div>
-          <p>После МРТ от 29.09.2025 врач рекомендовал следующий контроль через 2 года.</p>
-        </article>
+        <article class="card upcoming" id="nextExamCard"><div class="card-head"><div><p class="eyebrow">Контроль</p><h2>Следующее обследование</h2></div></div><div class="date-tile"><strong>—</strong><span>Загрузка данных…</span></div><p>Дождитесь завершения синхронизации.</p></article>
       </div>
       <article class="card recent"><div class="card-head"><div><p class="eyebrow">Дневник</p><h2>Последние записи</h2></div><button class="text-button" data-view-link="diary">Все записи →</button></div><div id="recentEntries" class="empty">Записей пока нет</div></article>
     </section>
@@ -58,22 +56,19 @@
       <div id="entriesList" class="entry-list"></div>
     </section>
 
+    <section class="view" id="statistics">
+      <div class="page-head"><div><p class="eyebrow">Анализ наблюдений</p><h1>Статистика боли</h1><p>Закономерности рассчитываются по записям дневника.</p></div><select id="statsPeriod" class="period-select"><option value="30">30 дней</option><option value="90">90 дней</option><option value="365">Год</option><option value="all">Всё время</option></select></div>
+      <div id="statsContent"></div>
+    </section>
+
     <section class="view" id="history">
       <div class="page-head"><div><p class="eyebrow">2021–2027</p><h1>История болезни</h1><p>Хронология перенесена из PDF. Исходный документ не изменён.</p></div><button class="primary" id="newHistoryEvent">＋ Добавить событие</button></div>
       <div class="history-toolbar"><input id="historySearch" type="search" placeholder="Найти событие, врача или обследование…"><div class="chips"><button class="chip active" data-type="all">Все</button><button class="chip" data-type="operation">Операции</button><button class="chip" data-type="mri">МРТ</button><button class="chip" data-type="exam">Обследования</button><button class="chip" data-type="treatment">Назначения</button></div></div>
       <div id="timeline" class="timeline"></div>
     </section>
 
-    <section class="view" id="profile">
-      <div class="page-head"><div><p class="eyebrow">Кратко для врача</p><h1>Медицинская карта</h1><p>Сводка основных сведений из истории болезни.</p></div><button class="secondary" onclick="window.print()">Печать</button></div>
-      <div class="profile-grid">
-        <article class="card accent-card"><p class="eyebrow">Диагноз</p><h2>Гидроцефалия, ликворная киста</h2><p>Воспаление зрительного нерва обоих глаз, правый больше.</p></article>
-        <article class="card"><p class="eyebrow">Операции</p><h2>3 нейрохирургических вмешательства</h2><ul><li>07.06.2021 — эндоскопическая операция</li><li>04.05.2022 — фенестрация кисты в 3 местах</li><li>29.06.2023 — повторная фенестрация и установка катетера</li></ul></article>
-        <article class="card"><p class="eyebrow">Текущий контроль</p><h2>Положительная динамика</h2><p>21.10.2025 Dr. Lutz Schreiber: передняя часть кисты уменьшилась ещё на 3 мм. Следующее МРТ — через 2 года.</p></article>
-        <article class="card"><p class="eyebrow">Врачи и клиники</p><h2>Нейрохирургия</h2><p>Dr. med. Lutz Schreiber<br>Kinder- und Jugendklinik Gelsenkirchen</p><p class="muted">Операции также проводились в Klinikum Vest, Recklinghausen.</p></article>
-      </div>
-      <article class="notice"><strong>Важно</strong><p>Эта карта и дневник помогают хранить наблюдения, но не заменяют врача. При внезапной очень сильной головной боли, нарушении речи/зрения, слабости, судорогах или потере сознания нужна срочная медицинская помощь.</p></article>
-    </section>
+<section class="view" id="profile"><div class="page-head"><div><p class="eyebrow">Для вас и врача</p><h1>Медицинская карта</h1><p>История лечения, документы и понятная выписка для консультации.</p></div><div class="page-actions"><button class="primary" id="doctorReportButton">Выписка для врача</button><button class="secondary" id="uploadDocumentButton">Добавить PDF</button></div></div><div id="medicalCardContent"><article class="card"><p class="eyebrow">Приватные данные</p><h2>Войдите в аккаунт</h2><p>После синхронизации здесь появится медицинская сводка.</p></article></div><section class="documents-section"><div class="card-head"><div><p class="eyebrow">Приватный архив</p><h2>Выписки и документы</h2></div><span class="muted">PDF, до 15 МБ</span></div><div id="documentsList" class="documents-list"><article class="card empty">Войдите, чтобы загрузить документы.</article></div></section></section>
+    <section class="view" id="doctors"><div class="page-head"><div><p class="eyebrow">Приватная адресная книга</p><h1>Мои врачи</h1><p>Контакты врачей и важная информация всегда под рукой.</p></div><button class="primary" id="newDoctorButton">＋ Добавить врача</button></div><div class="filter-row"><input id="doctorSearch" type="search" placeholder="Найти врача, специальность или клинику…"></div><div id="doctorsList" class="doctors-list"></div></section>
   </main>
 
   <dialog id="entryDialog">
@@ -107,11 +102,15 @@
   </dialog>
 
   <dialog id="dataDialog" class="small-dialog"><div class="dialog-head"><div><p class="eyebrow">Ваши данные</p><h2>Резервная копия</h2></div><button class="close" data-data-close>×</button></div><p>Записи хранятся только в этом браузере. Регулярно сохраняйте копию.</p><div class="stack"><button class="primary" id="exportData">Экспортировать JSON</button><label class="secondary file-label">Импортировать JSON<input id="importData" type="file" accept="application/json"></label></div></dialog>
-  <dialog id="historyDialog" class="history-dialog"><form id="historyForm" method="dialog"><div class="dialog-head"><div><p class="eyebrow">Медицинская история</p><h2 id="historyDialogTitle">Новое событие</h2></div><button type="button" class="close" data-history-close>×</button></div><input type="hidden" name="id"><div class="form-grid"><label>Дата<input required name="date" type="date"></label><label>Тип события<select required name="type"><option value="exam">Приём врача / обследование</option><option value="mri">МРТ</option><option value="operation">Операция</option><option value="treatment">Назначение / лечение</option></select></label><label class="span-2">Название<input required name="title" placeholder="Например: консультация невролога"></label><label>Врач<input name="doctor" placeholder="Имя врача"></label><label>Клиника / город<input name="clinic" placeholder="Название клиники, город"></label><label class="span-2">Результат и рекомендации<textarea name="description" placeholder="Что сказал врач, результаты, следующий контроль…"></textarea></label><label class="span-2">Назначенные лекарства<textarea name="medications" placeholder="Название, дозировка, длительность курса"></textarea></label><label class="span-2">Дополнительные заметки<textarea name="notes" placeholder="Вопросы врачу, документы, диск МРТ и другие детали"></textarea></label></div><div class="dialog-actions"><button type="button" class="secondary" data-history-close>Отмена</button><button class="primary">Сохранить событие</button></div></form></dialog>
+  <dialog id="historyDialog" class="history-dialog"><form id="historyForm" method="dialog"><div class="dialog-head"><div><p class="eyebrow">Медицинская история</p><h2 id="historyDialogTitle">Новое событие</h2></div><button type="button" class="close" data-history-close>×</button></div><input type="hidden" name="id"><div class="form-grid"><label>Дата<input required name="date" type="date"></label><label>Тип события<select required name="type"><option value="exam">Приём врача / обследование</option><option value="mri">МРТ</option><option value="operation">Операция</option><option value="treatment">Назначение / лечение</option></select></label><label class="span-2">Название<input required name="title" placeholder="Например: консультация невролога"></label><label>Врач<input name="doctor" placeholder="Имя врача"></label><label>Клиника / город<input name="clinic" placeholder="Название клиники, город"></label><label class="span-2">Результат и рекомендации<textarea name="description" placeholder="Что сказал врач, результаты, следующий контроль…"></textarea></label><label class="span-2">Назначенные лекарства<textarea name="medications" placeholder="Название, дозировка, длительность курса"></textarea></label><label class="span-2">Дополнительные заметки<textarea name="notes" placeholder="Вопросы врачу, документы, диск МРТ и другие детали"></textarea></label><div class="span-2 history-attachments"><strong>Документы и изображения</strong><p class="muted">PDF, JPG, PNG или WEBP — до 15 МБ каждый. Файлы доступны только после входа.</p><label class="secondary attachment-picker">＋ Выбрать файлы<input name="attachments" type="file" accept="application/pdf,image/jpeg,image/png,image/webp" multiple></label><div id="historyAttachmentList" class="history-attachment-list"></div><p id="historyAttachmentMessage" class="auth-message"></p></div></div><div class="dialog-actions"><button type="button" class="secondary" data-history-close>Отмена</button><button class="primary">Сохранить событие</button></div></form></dialog>
   <dialog id="authDialog" class="small-dialog"><form id="authForm"><div class="dialog-head"><div><p class="eyebrow">Приватная синхронизация</p><h2>Вход в дневник</h2></div><button type="button" class="close" data-auth-close>×</button></div><p>Войдите с одинаковым email на телефоне и компьютере.</p><label class="auth-label">Email<input required name="email" type="email" autocomplete="email" placeholder="name@example.com"></label><label class="auth-label">Пароль<input required name="password" type="password" minlength="8" autocomplete="current-password" placeholder="Не менее 8 символов"></label><p id="authMessage" class="auth-message"></p><div class="stack"><button class="primary" name="action" value="signin">Войти</button><button class="secondary" name="action" value="signup">Создать аккаунт</button><button type="button" class="text-button forgot-button" id="forgotPassword">Забыли пароль?</button></div></form></dialog>
+  <dialog id="documentDialog" class="small-dialog"><form id="documentForm"><div class="dialog-head"><div><p class="eyebrow">Медицинский документ</p><h2>Добавить PDF</h2></div><button type="button" class="close" data-document-close>×</button></div><label class="auth-label">Название<input required name="title" placeholder="Например: выписка после операции"></label><label class="auth-label">Тема<select required name="category"><option value="hospital">Выписка из больницы</option><option value="mri">МРТ / обследование</option><option value="operation">Операция</option><option value="doctor">Заключение врача</option><option value="analysis">Анализы</option><option value="other">Другое</option></select></label><label class="auth-label">Дата документа<input required name="document_date" type="date"></label><label class="auth-label">PDF-файл<input required name="file" type="file" accept="application/pdf"></label><p id="documentMessage" class="auth-message"></p><div class="dialog-actions"><button type="button" class="secondary" data-document-close>Отмена</button><button class="primary">Загрузить</button></div></form></dialog>
+  <dialog id="doctorReportDialog" class="report-dialog"><form id="doctorReportForm"><div class="dialog-head"><div><p class="eyebrow">Подготовка к консультации</p><h2>Выписка для врача</h2></div><button type="button" class="close" data-report-close>×</button></div><div class="report-controls"><label>Язык<select name="language"><option value="ru">Русский</option><option value="uk">Українська</option><option value="en">English</option><option value="de">Deutsch</option><option value="pl">Polski</option></select></label><label>Записи дневника<select name="period"><option value="14">Последние 14 дней</option><option value="30" selected>Последние 30 дней</option><option value="90">Последние 90 дней</option><option value="all">Все записи</option></select></label><label class="check-label"><input type="checkbox" name="includeNotes" checked> Включить заметки и самочувствие</label><label class="check-label"><input type="checkbox" name="includeHistory" checked> Включить медицинскую историю</label><label class="check-label"><input type="checkbox" name="includeDocuments" checked> Добавить список документов</label></div><div class="dialog-actions"><button type="button" class="secondary" data-report-close>Отмена</button><button class="primary">Создать выписку</button></div></form></dialog>
+  <dialog id="doctorDialog" class="history-dialog"><form id="doctorForm"><div class="dialog-head"><div><p class="eyebrow">Контакт врача</p><h2 id="doctorDialogTitle">Новый врач</h2></div><button type="button" class="close" data-doctor-close>×</button></div><input type="hidden" name="id"><div class="form-grid"><label class="span-2">Имя и фамилия<input required name="name" placeholder="Например: Анна Новак"></label><label>Специальность<input name="specialty" placeholder="Невролог, гинеколог…"></label><label>Клиника<input name="clinic" placeholder="Название клиники"></label><label>Телефон<input name="phone" type="tel" inputmode="tel" placeholder="+48 000 000 000"></label><label>Email<input name="email" type="email" placeholder="doctor@example.com"></label><label class="span-2">Адрес<input name="address" placeholder="Улица, дом, город"></label><label class="span-2">Сайт<input name="website" type="url" placeholder="https://..."></label><label class="span-2">Важная информация<textarea name="notes" placeholder="Часы приёма, языки, номер кабинета, что взять с собой…"></textarea></label></div><div class="dialog-actions"><button type="button" class="secondary" data-doctor-close>Отмена</button><button class="primary">Сохранить врача</button></div></form></dialog>
+  <section id="doctorReportPrint" class="doctor-report-print"></section>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="app.js"></script>
-  <script src="cloud.js"></script>
+  <script src="app.js?v=21"></script>
+  <script src="cloud.js?v=21"></script>
 </body>
 </html>
